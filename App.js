@@ -13,7 +13,7 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={appStyles.container}>
         <Text>Welcome to Beacon</Text>
         <Input />
         <List items={this.state.items}/>
@@ -22,10 +22,10 @@ export default class App extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
+const appStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'wheat',
+    backgroundColor: 'lightgrey',
     alignItems: 'center',
     justifyContent: 'center',
   },

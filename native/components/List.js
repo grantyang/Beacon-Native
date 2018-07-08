@@ -4,8 +4,7 @@ import ListItem from './ListItem.js';
 
 const List = (props) => (
   <View>
-    <Text> Native List Component </Text>
-    There are { props.items.length } items.
+    <Text> Added So Far: </Text>
     { props.items.map(item => <ListItem key={item} item={item}/>)}
   </View>
 )
