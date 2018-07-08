@@ -7,7 +7,15 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items:['beer','ramen']
+      items: ['hihi']
+    };
+    this.addNewInterest = this.addNewInterest.bind(this);
+  }
+
+  addNewInterest(interest) {
+    const lowerCaseInterest = interest.toLowerCase();
+    if (interest && !this.state.items.includes(lowerCaseInterest)) {
+      this.setState(prevState => ({ items: [...prevState.items, lowerCaseInterest] }));
     }
   }
 
@@ -15,8 +23,8 @@ export default class App extends React.Component {
     return (
       <View style={appStyles.container}>
         <Text>Welcome to Beacon</Text>
-        <Input />
-        <List items={this.state.items}/>
+        <Input addNewInterest={this.addNewInterest} />
+        <List items={this.state.items} />
       </View>
     );
   }
@@ -27,6 +35,6 @@ const appStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'lightgrey',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'
+  }
 });
