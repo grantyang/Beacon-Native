@@ -31,6 +31,7 @@ app.use(express.static(__dirname + '/../client/dist'));
 // });
 
 app.get('/fsquare/explore', function(req, res) {
+  console.log('SERVER GET REQUEST')
   let updated_qs = Object.assign(
     {},
     {

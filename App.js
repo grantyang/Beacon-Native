@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { StyleSheet, Text, View } from 'react-native';
 
 import List from './native/components/List.js';
@@ -9,6 +10,9 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      latitude: 37.7749,
+      longitude: -122.4194,
+      limit: 20,
       interestList: ['test item'],
       places: [
         { lat: 37.7749, lng: -122.4594, name: "Grant's Deli" },
@@ -25,10 +29,32 @@ export default class App extends React.Component {
   addNewInterest(interest) {
     const lowerCaseInterest = interest.toLowerCase();
     if (interest && !this.state.interestList.includes(lowerCaseInterest)) {
-      this.setState(prevState => ({ interestList: [...prevState.interestList, lowerCaseInterest] }));
+      this.getPlacesFromAPI(interest);
+      this.setState(prevState => ({
+        interestList: [...prevState.interestList, lowerCaseInterest]
+      }));
     } else {
       alert('Interest already added');
     }
+  }
+
+  getPlacesFromAPI(interest) {
+    axios
+      .get(`http://localhost:1337/fsquare/explore/`, {
+        params: {
+          query: interest,
+          ll: `${this.state.latitude},${this.state.longitude}`,
+          radius: 20000,
+          limit: this.state.limit
+        }
+      })
+      .then(res => {
+        const fetchedVenues = res.data.response.groups[0].items;
+        console.log(fetchedVenues);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   render() {
