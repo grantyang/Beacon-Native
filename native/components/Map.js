@@ -7,22 +7,8 @@ Mapbox.setAccessToken(
 );
 
 export default class Map extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      places: [
-        { lat: 37.7749, lng: -122.4594, name: "Grant's Deli" },
-        { lat: 37.7849, lng: -122.4494, name: 'Ramen Underground' },
-        { lat: 37.7249, lng: -122.4394, name: 'El Farolito' },
-        { lat: 37.7949, lng: -122.4294, name: 'The Black Cat 2' },
-        { lat: 37.7649, lng: -122.4294, name: 'The Black Cat' },
-        { lat: 37.7549, lng: -122.4194, name: 'Tu Lan Vietnamese' }
-      ]
-    };
-  }
-
   renderSinglePoint(i) {
-    let currentPlace = this.state.places[i];
+    let currentPlace = this.props.places[i];
     return (
       <Mapbox.PointAnnotation
         key={currentPlace.name}
@@ -38,7 +24,7 @@ export default class Map extends Component {
 
   renderAllPoints() {
     let allPoints = [];
-    for (let i = 0; i < this.state.places.length; i++) {
+    for (let i = 0; i < this.props.places.length; i++) {
       allPoints.push(this.renderSinglePoint(i));
     }
     return allPoints;

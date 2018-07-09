@@ -9,25 +9,35 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: ['test item']
+      interestList: ['test item'],
+      places: [
+        { lat: 37.7749, lng: -122.4594, name: "Grant's Deli" },
+        { lat: 37.7849, lng: -122.4494, name: 'Ramen Underground' },
+        { lat: 37.7249, lng: -122.4394, name: 'El Farolito' },
+        { lat: 37.7949, lng: -122.4294, name: 'The Black Cat 2' },
+        { lat: 37.7649, lng: -122.4294, name: 'The Black Cat' },
+        { lat: 37.7549, lng: -122.4194, name: 'Tu Lan Vietnamese' }
+      ]
     };
     this.addNewInterest = this.addNewInterest.bind(this);
   }
 
   addNewInterest(interest) {
     const lowerCaseInterest = interest.toLowerCase();
-    if (interest && !this.state.items.includes(lowerCaseInterest)) {
-      this.setState(prevState => ({ items: [...prevState.items, lowerCaseInterest] }));
+    if (interest && !this.state.interestList.includes(lowerCaseInterest)) {
+      this.setState(prevState => ({ interestList: [...prevState.interestList, lowerCaseInterest] }));
+    } else {
+      alert('Interest already added');
     }
   }
 
   render() {
     return (
       <View style={appStyles.container}>
-        <Map />
+        <Map places={this.state.places} />
         <Text>Welcome to Beacon</Text>
         <Input addNewInterest={this.addNewInterest} />
-        <List items={this.state.items} />
+        <List interestList={this.state.interestList} />
       </View>
     );
   }
