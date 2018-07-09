@@ -19,3 +19,6 @@ yarn-error.log*
 # ios/android build files
 /android
 /ios
+
+# env file
+.env
