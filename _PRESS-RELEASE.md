@@ -32,6 +32,7 @@ Once the project moves into development, the press release can be used as a touc
   > "Neighborhood maps, tailored for you."
 
 ## How to Get Started ##
+  > To build: run react-native run-ios
   > Just enter topics that matter to you e.g. "craft beer", "places to work", "jazz club", "ramen" and watch as the map is populated with top rated establishments.
 
 ## Customer Quote ##
