@@ -1,7 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
 import List from './native/components/List.js';
 import Input from './native/components/Input.js';
+import Map from './native/components/Map.js';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -22,6 +24,7 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={appStyles.container}>
+        <Map />
         <Text>Welcome to Beacon</Text>
         <Input addNewInterest={this.addNewInterest} />
         <List items={this.state.items} />

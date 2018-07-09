@@ -29,6 +29,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@mapbox/react-native-mapbox-gl": "^6.1.2-beta2",
     "body-parser": "^1.17.2",
     "expo": "^27.0.1",
     "express": "^4.15.0",
