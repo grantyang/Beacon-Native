@@ -14,15 +14,7 @@ export default class App extends React.Component {
       longitude: -122.4194,
       limit: 10,
       interestList: [],
-      places: [
-        { lat: 37.7749, lng: -122.4594, name: "Grant's Deli" },
-        { lat: 37.7849, lng: -122.4494, name: 'Ramen Underground' },
-        { lat: 37.7249, lng: -122.4394, name: 'El Farolito' },
-        { lat: 37.7949, lng: -122.4294, name: 'The Black Cat 2' },
-        { lat: 37.7649, lng: -122.4294, name: 'The Black Cat' },
-        { lat: 37.7549, lng: -122.4194, name: 'Tu Lan Vietnamese' }
-      ],
-      colors: ['indigo', 'red', 'orange', 'yellow', 'green', 'blue',]
+      places: []
     };
     this.addNewInterest = this.addNewInterest.bind(this);
     this.removeInterest = this.removeInterest.bind(this);
@@ -41,8 +33,6 @@ export default class App extends React.Component {
   }
 
   removeInterest(interest) {
-    console.log(this.state.places)
-    console.log('filter will result in:', this.state.interestList.filter((item) => item !== interest));
     this.setState({
       interestList: this.state.interestList.filter((item) => item !== interest),
       places: this.state.places.filter((place) => place.interest !== interest)
