@@ -1,36 +1,36 @@
 import React, { Component } from 'react';
-import { Button, TextInput, StyleSheet, View } from 'react-native';
+import { TextInput, StyleSheet, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 
 export default class Input extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: 'Try "craft beer" or "burrito"'
+      text: 'Try "craft beer" or "good place to work"'
     };
   }
 
   addInterestButtonClicked() {
-    // Clear out input and add interest to app state
-    this.setState({
-      text: ''
-    });
+    this.setState({ text: '' });
     this.props.addNewInterest(this.state.text);
   }
 
   render() {
     return (
-      <View>
+      <View style={inputStyles.textInputContainer}>
         <TextInput
           style={inputStyles.textInput}
           onChangeText={text => this.setState({ text })}
           onFocus={() => this.setState({ text: '' })}
           value={this.state.text}
         />
-        <Button
-          onPress={() => this.addInterestButtonClicked()}
-          title="Add Interest"
+        <Icon
+          iconStyle={inputStyles.icon}
+          name="add-location"
+          underlayColor="darkpurple"
+          size={36}
           color="indigo"
-          accessibilityLabel="Add Interest"
+          onPress={() => this.addInterestButtonClicked()}
         />
       </View>
     );
@@ -38,11 +38,17 @@ export default class Input extends Component {
 }
 
 const inputStyles = StyleSheet.create({
+  textInputContainer: {
+    flexDirection: 'row'
+  },
+  icon: {
+    paddingTop: 2
+  },
   textInput: {
-    marginTop: 6,
+    marginTop: 3,
     paddingLeft: 12,
     height: 36,
-    width: 200,
+    width: 275,
     borderColor: 'indigo',
     borderWidth: 1,
     borderRadius: 8,

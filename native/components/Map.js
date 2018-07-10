@@ -49,7 +49,10 @@ export default class Map extends Component {
 const mapStyles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%'
+    width: '100%',
+    borderWidth: .5,
+    borderColor: 'lightgrey',
+
   },
   pointContainer: {
     width: 20,
