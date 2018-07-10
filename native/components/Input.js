@@ -11,8 +11,8 @@ export default class Input extends Component {
   }
 
   addInterestButtonClicked() {
-    this.setState({ text: '' });
     this.props.addNewInterest(this.state.text);
+    this.setState({ text: '' });
   }
 
   render() {

@@ -16,10 +16,10 @@ export default class App extends React.Component {
       limit: 10,
       interestList: [],
       places: [],
-      modalVisible: true
     };
     this.addNewInterest = this.addNewInterest.bind(this);
     this.removeInterest = this.removeInterest.bind(this);
+    this.setCurrentUser = this.setCurrentUser.bind(this);
   }
 
   componentDidUpdate(_, prevState) {
@@ -29,6 +29,10 @@ export default class App extends React.Component {
     if (this.state.interestList.length !== prevState.interestList.length) {
       this.upsertUserInDatabase(this.state.interestList);
     }
+  }
+
+  setCurrentUser(name) {
+    this.setState({currentUser: name})
   }
 
   addNewInterest(interest) {
@@ -100,7 +104,7 @@ export default class App extends React.Component {
   upsertUserInDatabase(interests) {
     axios.post(`http://localhost:1337/saved-interests/`, {
       data: {
-        user: "John",
+        user: this.state.currentUser,
         savedInterests: interests
       }
     });
@@ -109,7 +113,7 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={appStyles.container}>
-        <InputModal visible={this.state.modalVisible}/>
+        <InputModal setCurrentUser={this.setCurrentUser} />
         <Text style={appStyles.titleText}>Beacon</Text>
         <Input addNewInterest={this.addNewInterest} />
         <List interestList={this.state.interestList} removeInterest={this.removeInterest}/>

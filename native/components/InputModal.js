@@ -9,41 +9,42 @@ import {
 } from 'react-native';
 
 export default class InputModal extends Component {
-  state = {
-    modalVisible: true
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalVisible: true,
+      text: ''
+    };
+  }
 
-  setModalVisible(visible) {
-    this.setState({ modalVisible: visible });
+  onModalSubmit() {
+    this.props.setCurrentUser(this.state.text);
+    this.setState({ modalVisible: false });
   }
 
   render() {
     return (
       <View>
         <Modal
-          animationType="none"
           transparent={true}
           presentationStyle="overFullScreen"
-          visible={this.state.modalVisible}
-          onRequestClose={() => {
-            alert('Modal has been closed.');
-          }}>
+          visible={this.state.modalVisible}>
           <View style={modalStyles.view}>
-            <View>
-              <Text style={modalStyles.modalTopText}>Please enter your name:</Text>
-              <TextInput
-                style={modalStyles.modalInput}
-                onChangeText={text => this.setState({ text })}
-                onFocus={() => this.setState({ text: '' })}
-                value={this.state.text}
-              />
-              <TouchableHighlight
-                onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);
-                }}>
-                <Text style={modalStyles.modalBottomText}>Submit</Text>
-              </TouchableHighlight>
-            </View>
+            <Text style={modalStyles.modalTopText}>
+              Please enter your name:
+            </Text>
+            <TextInput
+              style={modalStyles.modalInput}
+              onChangeText={text => this.setState({ text })}
+              onFocus={() => this.setState({ text: '' })}
+              value={this.state.text}
+            />
+            <TouchableHighlight
+              onPress={() => {
+                this.onModalSubmit();
+              }}>
+              <Text style={modalStyles.modalBottomText}>Submit!</Text>
+            </TouchableHighlight>
           </View>
         </Modal>
       </View>
@@ -52,11 +53,6 @@ export default class InputModal extends Component {
 }
 
 const modalStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   view: {
     flex: 0,
     justifyContent: 'center',
@@ -79,7 +75,7 @@ const modalStyles = StyleSheet.create({
   modalBottomText: {
     marginTop: 6,
     fontFamily: 'Ubuntu',
-    color: 'indigo',
+    color: 'green',
     fontSize: 15
   },
   modalInput: {
