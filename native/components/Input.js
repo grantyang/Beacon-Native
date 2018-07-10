@@ -5,7 +5,7 @@ export default class Input extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: 'Try "craft beer" or "ramen"'
+      text: 'Try "craft beer" or "burrito"'
     };
   }
 
@@ -21,7 +21,7 @@ export default class Input extends Component {
     return (
       <View>
         <TextInput
-          style={inputStyles.container}
+          style={inputStyles.textInput}
           onChangeText={text => this.setState({ text })}
           onFocus={() => this.setState({ text: '' })}
           value={this.state.text}
@@ -38,11 +38,15 @@ export default class Input extends Component {
 }
 
 const inputStyles = StyleSheet.create({
-  container: {
+  textInput: {
+    marginTop: 6,
+    paddingLeft: 12,
     height: 36,
     width: 200,
     borderColor: 'indigo',
     borderWidth: 1,
-    borderRadius: 8
+    borderRadius: 8,
+    fontFamily: 'Ubuntu',
+    fontSize: 14
   }
 });

@@ -14,8 +14,8 @@ export default class Map extends Component {
         key={currentPlace.id}
         id="point"
         coordinate={[currentPlace.lng, currentPlace.lat]}>
-        <View style={styles.pointContainer}>
-          <View style={styles.pointFill} />
+        <View style={mapStyles.pointContainer}>
+          <View style={mapStyles.pointFill} />
         </View>
         <Mapbox.Callout title={currentPlace.name} />
       </Mapbox.PointAnnotation>
@@ -32,13 +32,13 @@ export default class Map extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={mapStyles.container}>
         <Mapbox.MapView
-          styleURL={Mapbox.StyleURL.Street}
+          styleURL={'mapbox://styles/grantyang1/cjjezrcvk6pd32ro8ac3mhck6'}
           zoomLevel={11}
           centerCoordinate={[-122.4194, 37.7749]}
           showUserLocation={true}
-          style={styles.container}>
+          style={mapStyles.container}>
           {this.renderAllPoints()}
         </Mapbox.MapView>
       </View>
@@ -46,10 +46,10 @@ export default class Map extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const mapStyles = StyleSheet.create({
   container: {
     flex: 1,
-    width: 375
+    width: '100%'
   },
   pointContainer: {
     width: 20,

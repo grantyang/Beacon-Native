@@ -14,7 +14,14 @@ export default class App extends React.Component {
       longitude: -122.4194,
       limit: 10,
       interestList: [],
-      places: []
+      places: [
+        { lat: 37.7749, lng: -122.4594, name: "Grant's Deli" },
+        { lat: 37.7849, lng: -122.4494, name: 'Ramen Underground' },
+        { lat: 37.7249, lng: -122.4394, name: 'El Farolito' },
+        { lat: 37.7949, lng: -122.4294, name: 'The Black Cat 2' },
+        { lat: 37.7649, lng: -122.4294, name: 'The Black Cat' },
+        { lat: 37.7549, lng: -122.4194, name: 'Tu Lan Vietnamese' }
+      ]
     };
     this.addNewInterest = this.addNewInterest.bind(this);
   }
@@ -35,15 +42,14 @@ export default class App extends React.Component {
     try {
       const res = await this.getPlacesFromAPI(interest);
       const fetchedPlaces = res.data.response.group.results;
-      
-      let fetchedPlacesFiltered = fetchedPlaces.map(
+
+      let formattedFetchedPlaces = fetchedPlaces.map(
         ({venue: {id, name, location: {lat, lng}}}) => ({
           id, name, lat, lng, interest}));
 
       this.setState(prevState => ({
-        places: prevState.places.concat(fetchedPlacesFiltered)
+        places: prevState.places.concat(formattedFetchedPlaces)
       }));
-
     } catch (err) {
       console.log(err);
     }
@@ -64,7 +70,7 @@ export default class App extends React.Component {
     return (
       <View style={appStyles.container}>
         <Map places={this.state.places} />
-        <Text>Welcome to Beacon</Text>
+        <Text style={appStyles.titleText}>Welcome to Beacon</Text>
         <Input addNewInterest={this.addNewInterest} />
         <List interestList={this.state.interestList} />
       </View>
@@ -75,8 +81,14 @@ export default class App extends React.Component {
 const appStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'lightgrey',
+    backgroundColor: 'whitesmoke',
     alignItems: 'center',
     justifyContent: 'flex-end'
+  },
+  titleText: {
+    marginTop: 6,
+    fontFamily: 'Ubuntu',
+    color: 'indigo',
+    fontSize: 20
   }
 });

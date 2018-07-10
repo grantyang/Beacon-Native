@@ -1,10 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-const ListItem = (props) => (
+const ListItem = props => (
   <View>
-    <Text>{ props.interest }</Text>
+    <Text style={itemStyles.itemText}>{props.interest}</Text>
   </View>
-)
+);
+
+const itemStyles = StyleSheet.create({
+  itemText: {
+    fontFamily: 'Ubuntu',
+    fontSize: 14
+  }
+});
 
 export default ListItem;
