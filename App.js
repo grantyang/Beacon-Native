@@ -21,9 +21,11 @@ export default class App extends React.Component {
         { lat: 37.7949, lng: -122.4294, name: 'The Black Cat 2' },
         { lat: 37.7649, lng: -122.4294, name: 'The Black Cat' },
         { lat: 37.7549, lng: -122.4194, name: 'Tu Lan Vietnamese' }
-      ]
+      ],
+      colors: ['indigo', 'red', 'orange', 'yellow', 'green', 'blue',]
     };
     this.addNewInterest = this.addNewInterest.bind(this);
+    this.removeInterest = this.removeInterest.bind(this);
   }
 
   addNewInterest(interest) {
@@ -36,6 +38,15 @@ export default class App extends React.Component {
     } else {
       alert('Interest already added');
     }
+  }
+
+  removeInterest(interest) {
+    console.log(this.state.places)
+    console.log('filter will result in:', this.state.interestList.filter((item) => item !== interest));
+    this.setState({
+      interestList: this.state.interestList.filter((item) => item !== interest),
+      places: this.state.places.filter((place) => place.interest !== interest)
+    })
   }
 
   async refreshPlaces(interest) {
@@ -69,10 +80,10 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={appStyles.container}>
-        <Map places={this.state.places} />
+        <Map places={this.state.places} colors={this.state.colors} />
         <Text style={appStyles.titleText}>Welcome to Beacon</Text>
         <Input addNewInterest={this.addNewInterest} />
-        <List interestList={this.state.interestList} />
+        <List interestList={this.state.interestList} removeInterest={this.removeInterest}/>
       </View>
     );
   }
