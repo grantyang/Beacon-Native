@@ -11,7 +11,7 @@ export default class Map extends Component {
     let currentPlace = this.props.places[i];
     return (
       <Mapbox.PointAnnotation
-        key={currentPlace.name}
+        key={currentPlace.id}
         id="point"
         coordinate={[currentPlace.lng, currentPlace.lat]}>
         <View style={styles.pointContainer}>

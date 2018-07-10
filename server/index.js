@@ -31,7 +31,7 @@ app.use(express.static(__dirname + '/../client/dist'));
 // });
 
 app.get('/fsquare/explore', function(req, res) {
-  console.log('SERVER GET REQUEST')
+  console.log('SERVER GET REQUEST');
   let updated_qs = Object.assign(
     {},
     {
@@ -43,13 +43,12 @@ app.get('/fsquare/explore', function(req, res) {
   );
   request(
     {
-      url: 'https://api.foursquare.com/v2/venues/explore', // + req.pathname,
+      url: 'https://api.foursquare.com/v2/search/recommendations',
       qs: updated_qs
     },
     (err, response, body) => {
       if (err) {
-        console.log('error');
-        return;
+        res.send(err);
       }
       res.json(JSON.parse(body));
     }
