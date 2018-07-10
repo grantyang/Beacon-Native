@@ -4,7 +4,14 @@ import { Icon } from 'react-native-elements';
 
 const ListItem = props => (
   <View style={itemStyles.itemTextContainer}>
-    <Icon name="clear" size={20} color="indigo" />
+    <Icon
+      name="clear"
+      size={20}
+      color="indigo"
+      onPress={() => {
+        props.removeInterest(props.interest);
+      }}
+    />
     <Text
       onPress={() => {
         props.removeInterest(props.interest);
