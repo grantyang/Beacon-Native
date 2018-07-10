@@ -4,26 +4,28 @@ import { StyleSheet, Text, View } from 'react-native';
 import List from './native/components/List.js';
 import Input from './native/components/Input.js';
 import Map from './native/components/Map.js';
+import InputModal from './native/components/InputModal.js';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentUser: '',
       latitude: 37.7749,
       longitude: -122.4194,
       limit: 10,
       interestList: [],
-      places: []
+      places: [],
+      modalVisible: true
     };
     this.addNewInterest = this.addNewInterest.bind(this);
     this.removeInterest = this.removeInterest.bind(this);
   }
 
-  componentDidMount() {
-    this.loadUserSavedInterests('John')
-  }
-
   componentDidUpdate(_, prevState) {
+    if (this.state.currentUser !== prevState.currentUser) {
+      this.loadUserSavedInterests(this.state.currentUser);
+    }
     if (this.state.interestList.length !== prevState.interestList.length) {
       this.upsertUserInDatabase(this.state.interestList);
     }
@@ -61,7 +63,7 @@ export default class App extends React.Component {
         places: prevState.places.concat(formattedFetchedPlaces)
       }));
     } catch (err) {
-      console.log(err);
+      console.log('There was an error:', err);
     }
   }
 
@@ -73,7 +75,10 @@ export default class App extends React.Component {
         radius: 20000,
         limit: this.state.limit
       }
-    });
+    })
+    .catch(err => {
+      console.log('There was an error:', err)
+    })
   }
 
   loadUserSavedInterests(user) {
@@ -86,6 +91,9 @@ export default class App extends React.Component {
       this.setState({
         interestList: savedInterests
       })
+    })
+    .catch(err => {
+      console.log('There was an error:', err)
     })
   }
 
@@ -101,10 +109,11 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={appStyles.container}>
-        <Map places={this.state.places} />
-        <Text style={appStyles.titleText}>Welcome to Beacon</Text>
+        <InputModal visible={this.state.modalVisible}/>
+        <Text style={appStyles.titleText}>Beacon</Text>
         <Input addNewInterest={this.addNewInterest} />
         <List interestList={this.state.interestList} removeInterest={this.removeInterest}/>
+        <Map places={this.state.places} />
       </View>
     );
   }
@@ -118,9 +127,9 @@ const appStyles = StyleSheet.create({
     justifyContent: 'flex-end'
   },
   titleText: {
-    marginTop: 6,
+    marginTop: 16,
     fontFamily: 'Ubuntu',
     color: 'indigo',
-    fontSize: 20
+    fontSize: 26
   }
 });

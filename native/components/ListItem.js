@@ -8,7 +8,6 @@ const ListItem = props => (
     <Text
       onPress={() => {
         props.removeInterest(props.interest);
-        //remove places related to props.interest
       }}
       style={itemStyles.itemText}>
       {props.interest}
