@@ -19,7 +19,6 @@ const userSchema = mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 const upsertUser = function(userObject) {
-  console.log('UPSERT. userObject is', userObject)
   return db
     .collection('users')
     .updateOne(
@@ -28,28 +27,14 @@ const upsertUser = function(userObject) {
       { upsert: true }
     )
     .then(item => {
-      console.log(item.result)
-      console.log('item saved to database');
       return item.result;
     });
 };
 
-// const selectAll = function(callback) {
-//   User.find({}, function(err, terms) {
-//     if (err) {
-//       callback(err, null);
-//     } else {
-//       callback(null, terms);
-//     }
-//   });
-// };
-
 const getUserInterests = function(user) {
-  console.log('GET. user is', user)
-  return User.findOne({user:user})
+  return User.findOne({ user: user })
     .exec()
     .then(data => {
-      console.log('data is', data)
       return data;
     });
 };

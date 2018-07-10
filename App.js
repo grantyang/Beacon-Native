@@ -15,7 +15,7 @@ export default class App extends React.Component {
       longitude: -122.4194,
       limit: 10,
       interestList: [],
-      places: [],
+      places: []
     };
     this.addNewInterest = this.addNewInterest.bind(this);
     this.removeInterest = this.removeInterest.bind(this);
@@ -32,7 +32,7 @@ export default class App extends React.Component {
   }
 
   setCurrentUser(name) {
-    this.setState({currentUser: name})
+    this.setState({ currentUser: name });
   }
 
   addNewInterest(interest) {
@@ -49,9 +49,9 @@ export default class App extends React.Component {
 
   removeInterest(interest) {
     this.setState({
-      interestList: this.state.interestList.filter((item) => item !== interest),
-      places: this.state.places.filter((place) => place.interest !== interest)
-    })
+      interestList: this.state.interestList.filter(item => item !== interest),
+      places: this.state.places.filter(place => place.interest !== interest)
+    });
   }
 
   async refreshPlaces(interest) {
@@ -62,7 +62,7 @@ export default class App extends React.Component {
       let formattedFetchedPlaces = fetchedPlaces.map(
         ({venue: {id, name, location: {lat, lng}}}) => ({
           id, name, lat, lng, interest}));
-
+          
       this.setState(prevState => ({
         places: prevState.places.concat(formattedFetchedPlaces)
       }));
@@ -72,33 +72,35 @@ export default class App extends React.Component {
   }
 
   getPlacesFromAPI(interest) {
-    return axios.get('http://localhost:1337/fsquare/explore/', {
-      params: {
-        query: interest,
-        ll: `${this.state.latitude},${this.state.longitude}`,
-        radius: 20000,
-        limit: this.state.limit
-      }
-    })
-    .catch(err => {
-      console.log('There was an error:', err)
-    })
+    return axios
+      .get('http://localhost:1337/fsquare/explore/', {
+        params: {
+          query: interest,
+          ll: `${this.state.latitude},${this.state.longitude}`,
+          radius: 20000,
+          limit: this.state.limit
+        }
+      })
+      .catch(err => {
+        console.log('There was an error:', err);
+      });
   }
 
   loadUserSavedInterests(user) {
-    axios.get(`http://localhost:1337/saved-interests/${user}`)
-    .then(res => {
-      const savedInterests = res.data.savedInterests;
-      for (let interest of savedInterests) {
-        this.refreshPlaces(interest);
-      }
-      this.setState({
-        interestList: savedInterests
+    axios
+      .get(`http://localhost:1337/saved-interests/${user}`)
+      .then(res => {
+        const savedInterests = res.data.savedInterests;
+        for (let interest of savedInterests) {
+          this.refreshPlaces(interest);
+        }
+        this.setState({
+          interestList: savedInterests
+        });
       })
-    })
-    .catch(err => {
-      console.log('There was an error:', err)
-    })
+      .catch(err => {
+        console.log('There was an error:', err);
+      });
   }
 
   upsertUserInDatabase(interests) {
@@ -116,7 +118,10 @@ export default class App extends React.Component {
         <InputModal setCurrentUser={this.setCurrentUser} />
         <Text style={appStyles.titleText}>Beacon</Text>
         <Input addNewInterest={this.addNewInterest} />
-        <List interestList={this.state.interestList} removeInterest={this.removeInterest}/>
+        <List
+          interestList={this.state.interestList}
+          removeInterest={this.removeInterest}
+        />
         <Map places={this.state.places} />
       </View>
     );
