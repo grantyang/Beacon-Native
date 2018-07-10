@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 import { StyleSheet, Text, View } from 'react-native';
-
 import List from './native/components/List.js';
 import Input from './native/components/Input.js';
 import Map from './native/components/Map.js';
@@ -18,6 +17,16 @@ export default class App extends React.Component {
     };
     this.addNewInterest = this.addNewInterest.bind(this);
     this.removeInterest = this.removeInterest.bind(this);
+  }
+
+  componentDidMount() {
+    this.loadUserSavedInterests('John')
+  }
+
+  componentDidUpdate(_, prevState) {
+    if (this.state.interestList.length !== prevState.interestList.length) {
+      this.upsertUserInDatabase(this.state.interestList);
+    }
   }
 
   addNewInterest(interest) {
@@ -42,7 +51,7 @@ export default class App extends React.Component {
   async refreshPlaces(interest) {
     try {
       const res = await this.getPlacesFromAPI(interest);
-      const fetchedPlaces = res.data.response.group.results;
+      const fetchedPlaces = res.data;
 
       let formattedFetchedPlaces = fetchedPlaces.map(
         ({venue: {id, name, location: {lat, lng}}}) => ({
@@ -57,7 +66,7 @@ export default class App extends React.Component {
   }
 
   getPlacesFromAPI(interest) {
-    return axios.get(`http://localhost:1337/fsquare/explore/`, {
+    return axios.get('http://localhost:1337/fsquare/explore/', {
       params: {
         query: interest,
         ll: `${this.state.latitude},${this.state.longitude}`,
@@ -67,10 +76,32 @@ export default class App extends React.Component {
     });
   }
 
+  loadUserSavedInterests(user) {
+    axios.get(`http://localhost:1337/saved-interests/${user}`)
+    .then(res => {
+      const savedInterests = res.data.savedInterests;
+      for (let interest of savedInterests) {
+        this.refreshPlaces(interest);
+      }
+      this.setState({
+        interestList: savedInterests
+      })
+    })
+  }
+
+  upsertUserInDatabase(interests) {
+    axios.post(`http://localhost:1337/saved-interests/`, {
+      data: {
+        user: "John",
+        savedInterests: interests
+      }
+    });
+  }
+
   render() {
     return (
       <View style={appStyles.container}>
-        <Map places={this.state.places} colors={this.state.colors} />
+        <Map places={this.state.places} />
         <Text style={appStyles.titleText}>Welcome to Beacon</Text>
         <Input addNewInterest={this.addNewInterest} />
         <List interestList={this.state.interestList} removeInterest={this.removeInterest}/>

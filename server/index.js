@@ -1,5 +1,5 @@
 var express = require('express');
-var request = require('request');
+var axios = require('axios');
 var bodyParser = require('body-parser');
 var db = require('../database');
 require('dotenv').config();
@@ -8,20 +8,31 @@ var app = express();
 var port = 1337;
 
 app.use(express.static(__dirname + '/../client/dist'));
+app.use(bodyParser.json());
 
-// app.get('/searchTerms', function (req, res) {
-//   db.selectAll(function(err, data) {
-//     if(err) {
-//       res.sendStatus(500);
-//     } else {
-//       res.json(data);
-//     }
-//   });
-// });
+app.post('/saved-interests', function(req, res) {
+  db.upsertUser(req.body.data)
+    .then(response => {
+      res.send(response);
+    })
+    .catch(err => {
+      res.sendStatus(500).send(err);
+    });
+});
+
+app.get('/saved-interests/:user', function(req, res) {
+  const user = req.params.user;
+  db.getUserInterests(user)
+    .then(response => {
+      res.send(response);
+    })
+    .catch(err => {
+      res.sendStatus(500).send(err);
+    });
+});
 
 app.get('/fsquare/explore', function(req, res) {
-  console.log('SERVER GET REQUEST');
-  let updated_qs = Object.assign(
+  let updatedQueryObj = Object.assign(
     {},
     {
       client_secret: process.env.FSQUARE_SECRET,
@@ -30,18 +41,16 @@ app.get('/fsquare/explore', function(req, res) {
     },
     req.query
   );
-  request(
-    {
-      url: 'https://api.foursquare.com/v2/search/recommendations',
-      qs: updated_qs
-    },
-    (err, response, body) => {
-      if (err) {
-        res.send(err);
-      }
-      res.json(JSON.parse(body));
-    }
-  );
+  axios
+    .get('https://api.foursquare.com/v2/search/recommendations', {
+      params: updatedQueryObj
+    })
+    .then(APIresponse => {
+      res.json(APIresponse.data.response.group.results);
+    })
+    .catch(err => {
+      res.sendStatus(500).send(err);
+    });
 });
 
 app.listen(port, function() {

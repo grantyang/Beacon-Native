@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/beacon');
 
-var db = mongoose.connection;
+const db = mongoose.connection;
 
 db.on('error', function() {
   console.log('mongoose connection error');
@@ -11,21 +11,48 @@ db.once('open', function() {
   console.log('mongoose connected successfully');
 });
 
-var userSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
   user: String,
-  search_terms: [String]
+  savedInterests: [String]
 });
 
-var User = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);
 
-var selectAll = function(callback) {
-  User.find({}, function(err, terms) {
-    if(err) {
-      callback(err, null);
-    } else {
-      callback(null, terms);
-    }
-  });
+const upsertUser = function(userObject) {
+  console.log('UPSERT. userObject is', userObject)
+  return db
+    .collection('users')
+    .updateOne(
+      { user: userObject.user },
+      { $set: { savedInterests: userObject.savedInterests } },
+      { upsert: true }
+    )
+    .then(item => {
+      console.log(item.result)
+      console.log('item saved to database');
+      return item.result;
+    });
 };
 
-module.exports.selectAll = selectAll;
+// const selectAll = function(callback) {
+//   User.find({}, function(err, terms) {
+//     if (err) {
+//       callback(err, null);
+//     } else {
+//       callback(null, terms);
+//     }
+//   });
+// };
+
+const getUserInterests = function(user) {
+  console.log('GET. user is', user)
+  return User.findOne({user:user})
+    .exec()
+    .then(data => {
+      console.log('data is', data)
+      return data;
+    });
+};
+
+module.exports.upsertUser = upsertUser;
+module.exports.getUserInterests = getUserInterests;
